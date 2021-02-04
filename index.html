@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+        
+        #tempareture {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="city" value="Dhaka" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="search" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="" alt="">
+            <h1 id="city-name"></h1>
+            <h3 id="tempareture"><span id="temp"></span> &deg; C
+            </h3>
+            <h1 id="main" class="lead"></h1>
+        </div>
+    </div>
+
+    <script>
+        function addApi(location = "Dhaka") {
+            fetch("http://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=716c24be5a69a1b52fb79c097b8ff022")
+                .then(res => res.json())
+                .then(data => {
+                    const weather = data.weather[0];
+                    document.getElementById("icon").src = "https://openweathermap.org/img/wn/" + weather.icon + "@2x.png";
+                    document.getElementById("city-name").innerText = data.name;
+
+                    document.getElementById("main").innerText = weather.main;
+
+                    document.getElementById("temp").innerText = Math.round(data.main.temp - 272.15);
+
+                    document.getElementById("tempareture").style.display = "block";
+                })
+        };
+
+        addApi();
+
+        document.getElementById("search").addEventListener("click", function() {
+            const city = document.getElementById("city").value;
+            const cityNameUpper = city.charAt(0).toUpperCase() + city.slice(1);
+            addApi(cityNameUpper);
+
+        });
+    </script>
+</body>
+
+</html>
