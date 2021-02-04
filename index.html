@@ -42,26 +42,28 @@
     </div>
 
     <script>
-        function addApi(location = "Dhaka") {
-            fetch("http://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=716c24be5a69a1b52fb79c097b8ff022")
+        const apiKey = '716c24be5a69a1b52fb79c097b8ff022'
+        const apiBase = 'http://api.openweathermap.org/data/2.5/weather'
+        const getWeatherData = city => {
+            const url = `${apiBase}?q=${city}&appid=${apiKey}`;
+            fetch(url)
                 .then(res => res.json())
-                .then(data => {
-                    name(data);
+                .then(data => name(data))
+        }
 
-                })
-        };
+
 
         document.getElementById("search").addEventListener("click", function() {
             const city = document.getElementById("city").value;
             const cityNameUpper = city.charAt(0).toUpperCase() + city.slice(1);
-            addApi(cityNameUpper);
+            getWeatherData(cityNameUpper);
 
         });
 
         function name(data) {
             const weather = data.weather[0];
             document.getElementById("icon").src = "https://openweathermap.org/img/wn/" + weather.icon + "@2x.png";
-            document.getElementById("city-name").innerText = data.name;
+            document.getElementById("city-name").innerText = data.name || "Unknown Location";
 
             document.getElementById("main").innerText = weather.main;
 
@@ -69,6 +71,7 @@
 
             document.getElementById("tempareture").style.display = "block";
         }
+        getWeatherData("Dhaka");
     </script>
 </body>
 
